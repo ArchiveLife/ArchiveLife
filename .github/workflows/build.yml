@@ -25,13 +25,13 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14.x
-          
+
       - name: checkout
         uses: actions/checkout@v2
-        
+
       - name: Install native dependencies
         run: sudo apt-get update && sudo apt-get install libwebkit2gtk-4.0-dev xvfb -y
-        
+
       - name: install dependency (go)
         run: go get ./...
 
@@ -51,12 +51,12 @@ jobs:
 
       - name: build
         working-directory: main
-        run: bash build.sh
+        run: go build --mod=vendor -o archive-life-ui
 
       - name: upload artifact
         uses: actions/upload-artifact@v1.0.0
         with:
           # Artifact name
-          name: SNAPSHOTS-Build
+          name: archive-life-ui
           # Directory containing files to upload
-          path: main/build
+          path: main/archive-life-ui

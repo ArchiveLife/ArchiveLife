@@ -28,7 +28,10 @@ jobs:
           
       - name: checkout
         uses: actions/checkout@v2
-
+        
+      - name: Install native dependencies
+        run: sudo apt-get update && sudo apt-get install libwebkit2gtk-4.0-dev xvfb -y
+        
       - name: install dependency (go)
         run: go get ./...
 

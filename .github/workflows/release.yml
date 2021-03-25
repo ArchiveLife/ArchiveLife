@@ -11,7 +11,10 @@ jobs:
     steps:
       - uses: olegtarasov/get-tag@v2.1
         id: tagName
-
+        
+      - name: Install native dependencies
+        run: sudo apt-get update && sudo apt-get install libwebkit2gtk-4.0-dev xvfb -y
+        
       - name: setup golang
         uses: actions/setup-go@v1
         with:

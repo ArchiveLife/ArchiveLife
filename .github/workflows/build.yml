@@ -20,11 +20,20 @@ jobs:
           go-version: 1.16
         id: go
 
+      - uses: actions/checkout@v1
+      - name: setup nodejs
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+          
       - name: checkout
         uses: actions/checkout@v2
 
-      - name: install dependency
+      - name: install dependency (go)
         run: go get ./...
+
+      - name: install dependency (nodejs) and build
+        run: npm install && npm run build
 
       - name: unit test
         run: go test ./... -v -race -coverprofile=coverage.txt -covermode=atomic

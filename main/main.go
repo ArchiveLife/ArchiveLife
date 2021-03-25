@@ -1,22 +1,34 @@
 package main
 
 import (
-	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/widget"
+	"fmt"
+	"net"
+	"net/http"
+
+	"github.com/ArchiveLife/ui"
+	"github.com/webview/webview"
 )
 
 func main() {
-	a := app.New()
-	w := a.NewWindow("Hello")
 
-	hello := widget.NewLabel("Hello Fyne!")
-	w.SetContent(container.NewVBox(
-		hello,
-		widget.NewButton("Hi!", func() {
-			hello.SetText("Welcome :)")
-		}),
-	))
+	http.Handle("/", http.FileServer(http.FS(ui.GetUIContent())))
 
-	w.ShowAndRun()
+	listener, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		panic(err)
+	}
+	defer listener.Close()
+	port := listener.Addr().(*net.TCPAddr).Port
+
+	fmt.Println(port)
+
+	go http.Serve(listener, nil)
+	debug := true
+	w := webview.New(debug)
+	defer w.Destroy()
+	w.SetTitle("Archive Life")
+	w.SetSize(800, 600, webview.HintNone)
+	w.Navigate(fmt.Sprintf("http://127.0.0.1:%v", port))
+	w.Run()
+
 }

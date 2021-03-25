@@ -6,11 +6,13 @@ import (
 	"net/http"
 
 	"github.com/ArchiveLife/ui"
+	"github.com/ArchiveLife/ui/lib"
 	"github.com/webview/webview"
 )
 
 func main() {
 
+	http.HandleFunc("/services", lib.APIGetServices)
 	http.Handle("/", http.FileServer(http.FS(ui.GetUIContent())))
 
 	listener, err := net.Listen("tcp", "127.0.0.1:0")
